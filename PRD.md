@@ -82,4 +82,4 @@
 - **課綱對應**：尚未標示，需由課程專家補上。
 - **實機與輔助科技測試**：自動化涵蓋 Chromium 與 WebKit 模擬裝置，尚未在實體 iPad、Chromebook 及螢幕報讀器（VoiceOver、NVDA）上驗證。
 - **學生試用**：用語難度與實驗時間需以實際班級試教確認。
-- **部署決定**：主機、網域與是否允許嵌入其他平台（目前 `X-Frame-Options: SAMEORIGIN` 不允許）。
+- **部署決定**：可選擇 Node 伺服器版或 GitHub Pages 靜態版（`github-pages` 分支，差異見 `ARCHITECTURE.md`「兩種建置目標」）。靜態版無法禁止被其他網站嵌入；免費帳號的 GitHub Pages 需要公開儲存庫。

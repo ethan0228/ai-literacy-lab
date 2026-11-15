@@ -4,6 +4,7 @@ import { ProjectionBar } from '@/components/layout/ProjectionBar';
 import { PreferencesSync } from '@/components/layout/PreferencesSync';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { SiteHeader } from '@/components/layout/SiteHeader';
+import { buildCsp, IS_STATIC_EXPORT } from '@/lib/csp';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -24,6 +25,16 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="zh-Hant-TW">
+      {IS_STATIC_EXPORT && (
+        <head>
+          {/* 靜態主機無法送出 HTTP 標頭，改用 meta 標籤提供內容安全政策 */}
+          <meta
+            httpEquiv="Content-Security-Policy"
+            content={buildCsp({ dev: process.env.NODE_ENV !== 'production', forMeta: true })}
+          />
+          <meta name="referrer" content="strict-origin-when-cross-origin" />
+        </head>
+      )}
       <body className="flex min-h-dvh flex-col antialiased">
         <a
           href="#main"

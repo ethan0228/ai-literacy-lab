@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { atPath, IS_STATIC_EXPORT } from './helpers';
 
 const LAB_URL = '/modules/ai-basics/labs/ai-or-not';
 
@@ -42,7 +43,7 @@ test.describe('教師資源與關於', () => {
     await expect(page.getByRole('button', { name: '列印這份總覽' })).toBeVisible();
 
     await page.getByRole('rowheader').getByRole('link', { name: '公平檢查站' }).click();
-    await expect(page).toHaveURL('/modules/ai-ethics/labs/fairness-check');
+    await expect(page).toHaveURL(atPath('/modules/ai-ethics/labs/fairness-check'));
   });
 
   test('教師資源連結只在教師模式出現在主要導覽', async ({ page }) => {
@@ -51,13 +52,13 @@ test.describe('教師資源與關於', () => {
     await expect(nav.getByRole('link', { name: '教師資源' })).toHaveCount(0);
     await page.getByRole('button', { name: '教師模式' }).click();
     await nav.getByRole('link', { name: '教師資源' }).click();
-    await expect(page).toHaveURL('/teachers');
+    await expect(page).toHaveURL(atPath('/teachers'));
   });
 
   test('關於頁說明儲存的資料，並可從頁尾進入', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('link', { name: '關於本站與隱私說明' }).click();
-    await expect(page).toHaveURL('/about');
+    await expect(page).toHaveURL(atPath('/about'));
     for (const key of ['ail:mode:v1', 'ail:projection:v1', 'ail:progress:v1']) {
       await expect(page.getByText(key)).toBeVisible();
     }
@@ -99,7 +100,19 @@ test.describe('投影模式控制列', () => {
 });
 
 test.describe('上線前檢核', () => {
+  test('靜態匯出版以 meta 標籤提供內容安全政策', async ({ page }) => {
+    test.skip(!IS_STATIC_EXPORT, '只適用於 GitHub Pages 靜態匯出版');
+    await page.goto('/');
+    const csp = await page
+      .locator('meta[http-equiv="Content-Security-Policy"]')
+      .getAttribute('content');
+    expect(csp).toContain("default-src 'self'");
+    expect(csp).toContain("connect-src 'self'");
+    expect(csp).not.toContain('frame-ancestors');
+  });
+
   test('回應包含安全標頭', async ({ request }) => {
+    test.skip(IS_STATIC_EXPORT, '靜態主機無法送出自訂標頭');
     const response = await request.get('/');
     const headers = response.headers();
     expect(headers['content-security-policy']).toContain("default-src 'self'");

@@ -19,6 +19,9 @@ Node.js 22 以 Homebrew 安裝（keg-only）。若找不到 `node`，先執行�
 | `npm run build`                   | 正式建置                                                              |
 | `npm run test:e2e`                | Playwright（測試正式建置結果，需先 `npm run build`，使用連接埠 3100） |
 | `npm run check`                   | 依序執行以上全部檢查                                                  |
+| `npm run build:pages`             | 建置 GitHub Pages 靜態版到 `out/`（子路徑用 `PAGES_BASE_PATH=/名稱`） |
+| `npm run start:pages`             | 預覽 `out/`（`-- --base /名稱` 模擬子路徑）                           |
+| `npm run check:pages`             | 對靜態版執行全部檢查                                                  |
 
 ## 必須遵守的規則
 
@@ -49,4 +52,7 @@ Node.js 22 以 Homebrew 安裝（keg-only）。若找不到 `node`，先執行�
 - 新增 localStorage 鍵時要同步更新 `/about` 的說明，`e2e/pages.spec.ts` 會比對實際使用的鍵。
 - 新增外部資源會被 CSP 擋下（`next.config.ts`）；這是刻意的，本站不對外連線。
 - WebKit 測試的兩個差異：Tab 鍵預設不會聚焦連結（測試用 Option+Tab）；換頁時被取消的預先載入會回報 `access control checks` 錯誤（測試已排除）。
+- 有兩種建置目標（伺服器版與 GitHub Pages 靜態版，見 `ARCHITECTURE.md`）。新功能不得依賴伺服器端執行（Route Handler、Server Action、middleware、`headers()`），否則靜態版會壞；改動後 `npm run check` 與 `npm run check:pages` 都要通過。
+- 站內連結一律用 `next/link`，不要寫死 `<a href="/…">`，否則在子路徑下會失效。
+- e2e 比對網址用 `atPath()`（`e2e/helpers.ts`），靜態版網址有結尾斜線。
 - 新增實驗請照 `ARCHITECTURE.md`「新增一個實驗的步驟」；`content.test.ts` 會檢查是否漏登錄。

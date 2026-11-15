@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { atPath } from './helpers';
 
 const LAB_URL = '/modules/ai-basics/labs/ai-or-not';
 
@@ -11,7 +12,7 @@ test.describe('首頁與模組目錄', () => {
     await expect(page.getByText('可以開始')).toHaveCount(6);
 
     await page.getByRole('link', { name: 'AI 基礎與分類' }).click();
-    await expect(page).toHaveURL('/modules/ai-basics');
+    await expect(page).toHaveURL(atPath('/modules/ai-basics'));
     await expect(page.getByRole('heading', { level: 1, name: 'AI 基礎與分類' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'AI 家族地圖' })).toBeVisible();
   });
@@ -22,7 +23,7 @@ test.describe('首頁與模組目錄', () => {
       .getByRole('navigation', { name: '主要導覽' })
       .getByRole('link', { name: '學習模組' })
       .click();
-    await expect(page).toHaveURL('/modules');
+    await expect(page).toHaveURL(atPath('/modules'));
     await expect(page.getByRole('article')).toHaveCount(6);
   });
 

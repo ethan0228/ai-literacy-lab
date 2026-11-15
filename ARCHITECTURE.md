@@ -128,7 +128,31 @@ Progress       { version: 1, completedLabs: Record<labKey, ISO 時間> }
 - `Content-Security-Policy`：`default-src 'self'`、`connect-src 'self'`、`frame-ancestors 'self'` 等，瀏覽器層級禁止載入或連線到其他網站。靜態頁面含 Next.js 的行內指令碼，因此 `script-src` 保留 `'unsafe-inline'`；本站沒有把使用者輸入輸出成 HTML 的地方。開發模式另外允許 `'unsafe-eval'` 與 WebSocket。
 - `X-Content-Type-Options`、`X-Frame-Options: SAMEORIGIN`、`Referrer-Policy`、`Permissions-Policy`（停用相機、麥克風、定位）。
 
-若要讓網站嵌入學習平台的 iframe，需同時調整 `frame-ancestors` 與 `X-Frame-Options`。若以純靜態檔案部署（`output: 'export'`），這些標頭要改在主機或 CDN 設定。
+若要讓網站嵌入學習平台的 iframe，需同時調整 `frame-ancestors` 與 `X-Frame-Options`。以純靜態檔案部署時這些標頭不會送出，見下一節。
+
+### 兩種建置目標
+
+同一份程式碼可以建置成兩種版本，由環境變數 `DEPLOY_TARGET` 決定（`next.config.ts`）：
+
+|                                                | 伺服器版（預設）                           | GitHub Pages 靜態版                                   |
+| ---------------------------------------------- | ------------------------------------------ | ----------------------------------------------------- |
+| 建置                                           | `npm run build`                            | `npm run build:pages`                                 |
+| 輸出                                           | `.next/`，以 `next start` 執行             | `out/`，純 HTML／CSS／JS                              |
+| 網址                                           | `/modules`                                 | `/modules/`（`trailingSlash`）                        |
+| 子路徑                                         | 無                                         | `PAGES_BASE_PATH`（例如 `/ai-lab`），部署流程自動帶入 |
+| 內容安全政策                                   | HTTP 標頭                                  | `<meta>` 標籤（`src/app/layout.tsx`）                 |
+| 禁止被嵌入 iframe                              | 有（`frame-ancestors`、`X-Frame-Options`） | **無**：這兩項只能用 HTTP 標頭設定                    |
+| `X-Content-Type-Options`、`Permissions-Policy` | 有                                         | 無（由 GitHub Pages 決定）                            |
+| 完整檢查                                       | `npm run check`                            | `npm run check:pages`                                 |
+
+靜態版的相關檔案：
+
+- `src/lib/csp.ts`：兩種版本共用的 CSP 內容與 `IS_STATIC_EXPORT` 旗標。
+- `scripts/serve-static.mjs`：本機預覽與測試用的靜態伺服器，比照 GitHub Pages 的行為（資料夾回傳 `index.html`、找不到時回傳 `404.html`），可用 `--base` 模擬子路徑。
+- `public/.nojekyll`：讓 GitHub Pages 不要忽略 `_next` 資料夾。
+- `.github/workflows/deploy-pages.yml`：推送到 `github-pages` 分支時，檢查、建置並發布。
+
+注意：`帳號.github.io` 底下所有專案網站共用同一個來源（origin），因此也共用 localStorage。本站的鍵都以 `ail:` 開頭以避免衝突，但同帳號下的其他網站在技術上讀得到這些資料（內容只有模式與實驗完成紀錄）。使用自訂網域可避免這個情況。
 
 ## 新增一個實驗的步驟
 
