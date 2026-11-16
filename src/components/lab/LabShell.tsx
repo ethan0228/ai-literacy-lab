@@ -30,11 +30,12 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 /**
  * 所有實驗共用的頁面模板：
- * 標題 → 教學模型說明 → 學習目標 → 互動實驗 → 挑戰 → 反思 → 教師指引 → 完成標記。
+ * 標題 → 教學模型說明（精簡）→ 互動實驗 → 挑戰 → 反思 → 學習目標（收合）→ 教師指引 → 完成標記。
+ * 互動優先：實驗要盡量出現在第一個畫面，說明文字精簡或收合。
  */
 export function LabShell({ module, lab, children }: LabShellProps) {
   return (
-    <div className={`${container} space-y-6 py-8 sm:py-10`}>
+    <div className={`${container} space-y-5 py-6 sm:py-8`}>
       <Breadcrumbs
         items={[
           { label: '學習模組', href: '/modules' },
@@ -45,8 +46,8 @@ export function LabShell({ module, lab, children }: LabShellProps) {
 
       <header>
         <h1 className="text-3xl font-bold sm:text-4xl">{lab.title}</h1>
-        <p className="text-ink-muted mt-3 max-w-3xl text-lg">{lab.summary}</p>
-        <div className="projection:hidden mt-4 flex flex-wrap gap-2">
+        <p className="text-ink-muted mt-2 max-w-3xl text-lg">{lab.summary}</p>
+        <div className="projection:hidden mt-3 flex flex-wrap gap-2">
           <Badge tone="brand">約 {lab.durationMinutes} 分鐘</Badge>
           {lab.gradeBands.map((band) => (
             <Badge key={band}>{GRADE_BAND_LABELS[band]}</Badge>
@@ -55,14 +56,6 @@ export function LabShell({ module, lab, children }: LabShellProps) {
       </header>
 
       <ModelNotice>{lab.modelNotice}</ModelNotice>
-
-      <Section id="objectives-heading" title="學習目標">
-        <ul className="list-disc space-y-1 pl-5">
-          {lab.objectives.map((objective) => (
-            <li key={objective}>{objective}</li>
-          ))}
-        </ul>
-      </Section>
 
       <Section id="experiment-heading" title="互動實驗">
         {children}
@@ -81,6 +74,31 @@ export function LabShell({ module, lab, children }: LabShellProps) {
           ))}
         </ol>
       </Section>
+
+      <details className={`${card} group`}>
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+          <h2 id="objectives-heading" className="text-xl font-bold">
+            學習目標
+          </h2>
+          <span
+            aria-hidden="true"
+            className="text-ink-muted text-sm font-semibold group-open:hidden"
+          >
+            展開
+          </span>
+          <span
+            aria-hidden="true"
+            className="text-ink-muted hidden text-sm font-semibold group-open:inline"
+          >
+            收合
+          </span>
+        </summary>
+        <ul className="mt-4 list-disc space-y-1 pl-5">
+          {lab.objectives.map((objective) => (
+            <li key={objective}>{objective}</li>
+          ))}
+        </ul>
+      </details>
 
       <TeacherPanel guide={lab.teacherGuide} />
 
