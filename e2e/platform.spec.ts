@@ -12,9 +12,10 @@ test.describe('首頁與模組目錄', () => {
     // 首頁的迷你實驗：作答後出現回饋與前往完整實驗的連結
     await page.getByRole('button', { name: '照固定規則執行' }).click();
     await expect(page.getByTestId('try-it-feedback')).toContainText('答對了！');
+    // 靜態匯出版的連結會帶子路徑與結尾斜線，因此只比對路徑結尾
     await expect(page.getByRole('link', { name: /再玩 5 張/ })).toHaveAttribute(
       'href',
-      '/modules/ai-basics/labs/ai-or-not',
+      /\/modules\/ai-basics\/labs\/ai-or-not\/?$/,
     );
 
     await page.getByRole('link', { name: 'AI 基礎與分類' }).click();
