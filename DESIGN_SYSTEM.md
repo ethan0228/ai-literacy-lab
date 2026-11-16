@@ -53,16 +53,17 @@
 
 ## 元件
 
-| 元件             | 位置                     | 說明                                                                      |
-| ---------------- | ------------------------ | ------------------------------------------------------------------------- |
-| 按鈕             | `ui/styles.ts`           | `buttonPrimary`（藍底白字）、`buttonSecondary`（白底描邊）；最小高度 44px |
-| `Badge`          | `ui/Badge.tsx`           | `brand`、`accent`、`neutral`、`success` 四種色調                          |
-| `ModeSwitch`     | `layout/ModeSwitch.tsx`  | 分段按鈕；學生為藍、教師為橘                                              |
-| `ModuleCard`     | `modules/ModuleCard.tsx` | 整張卡片可點，連結文字為模組名稱                                          |
-| `ModelNotice`    | `lab/ModelNotice.tsx`    | 橘色淺底，每個實驗必備                                                    |
-| `ChallengePanel` | `lab/ChallengePanel.tsx` | 單選題與即時回饋                                                          |
-| `TeacherPanel`   | `lab/TeacherPanel.tsx`   | 橘色虛線框代表教師專屬內容                                                |
-| `LabShell`       | `lab/LabShell.tsx`       | 實驗頁模板                                                                |
+| 元件             | 位置                     | 說明                                                                       |
+| ---------------- | ------------------------ | -------------------------------------------------------------------------- |
+| 按鈕             | `ui/styles.ts`           | `buttonPrimary`（藍底白字）、`buttonSecondary`（白底描邊）；最小高度 44px  |
+| `Badge`          | `ui/Badge.tsx`           | `brand`、`accent`、`neutral`、`success` 四種色調                           |
+| `ModeSwitch`     | `layout/ModeSwitch.tsx`  | 分段按鈕；學生為藍、教師為橘                                               |
+| `ModuleCard`     | `modules/ModuleCard.tsx` | 整張卡片可點，連結文字為模組名稱；首頁用 `compact`（提問為主、不顯示描述） |
+| `HeroTryIt`      | `home/HeroTryIt.tsx`     | 首頁主視覺的迷你實驗：直接作答第一張分類卡，作答後連到完整實驗             |
+| `ModelNotice`    | `lab/ModelNotice.tsx`    | 橘色淺底，每個實驗必備                                                     |
+| `ChallengePanel` | `lab/ChallengePanel.tsx` | 單選題與即時回饋                                                           |
+| `TeacherPanel`   | `lab/TeacherPanel.tsx`   | 橘色虛線框代表教師專屬內容                                                 |
+| `LabShell`       | `lab/LabShell.tsx`       | 實驗頁模板                                                                 |
 
 教師專屬內容統一使用「橘色虛線外框 + 橘色標題」，讓教師一眼分辨。
 

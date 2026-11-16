@@ -4,7 +4,7 @@ export function ModelNotice({ children }: { children: string }) {
     <aside
       role="note"
       aria-label="教學模型說明"
-      className="border-accent-200 bg-accent-50 text-accent-800 flex gap-3 rounded-xl border p-4"
+      className="border-accent-200 bg-accent-50 text-accent-800 flex gap-2 rounded-xl border px-4 py-3 text-sm"
     >
       <svg
         viewBox="0 0 24 24"
@@ -13,7 +13,7 @@ export function ModelNotice({ children }: { children: string }) {
         strokeWidth="1.8"
         strokeLinecap="round"
         aria-hidden="true"
-        className="mt-0.5 size-6 shrink-0"
+        className="mt-0.5 size-5 shrink-0"
       >
         <circle cx="12" cy="12" r="9" />
         <path d="M12 11v5M12 7.5v.5" />
